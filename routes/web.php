@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Auth::routes();
+
+
+Route::group(['middleware'=>'auth'],function(){
+    Route::get('/', [PostController::class, 'index'])->name('index');
+    Route::resource('/post',PostController::class)->except('index');
+    Route::resource('/comment',CommentController::class);
+
 });
